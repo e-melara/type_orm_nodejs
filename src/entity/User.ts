@@ -1,11 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+ Entity,
+ PrimaryGeneratedColumn,
+ Column,
+ OneToOne,
+ JoinColumn
+} from "typeorm";
+import { UserDetails } from "./detail";
 
-@Entity()
+@Entity("users")
 export class User {
  @PrimaryGeneratedColumn()
  id: number;
 
- @Column()
+ @Column({ type: "varchar", length: 50 })
  firstName: string;
 
  @Column()
@@ -14,6 +21,13 @@ export class User {
  @Column()
  age: number;
 
- @Column()
+ @Column({ default: false })
  isStudent: boolean;
+
+ @OneToOne(type => UserDetails, {
+  eager: true,
+  cascade: true
+ })
+ @JoinColumn({ name: "detail_id" })
+ details: UserDetails;
 }
